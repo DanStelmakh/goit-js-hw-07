@@ -3,7 +3,7 @@ import { galleryItems } from "./gallery-items.js";
 
 // console.log(galleryItems);
 
-// Создание и рендер разметки по массиву данных galleryItems
+// /Создание и рендер разметки по массиву данных galleryItems
 /*<div class="gallery__item">
   <a class="gallery__link" href="large-image.jpg">
     <img
@@ -18,9 +18,10 @@ import { galleryItems } from "./gallery-items.js";
 const galleryContainer = document.querySelector(".gallery");
 // Переменная для хранения вызова функции
 const createImageCards = addGalleryItem(galleryItems);
-// Добавить созданныые элементы в разметку
+// Добавить созданные элементы в разметку
 galleryContainer.insertAdjacentHTML("beforeend", createImageCards);
-// Создать функцию в разметку
+
+// /Создать функцию которая добавляет элементы  в разметку
 function addGalleryItem(items) {
   //   console.log(items);
   return items
@@ -39,4 +40,20 @@ function addGalleryItem(items) {
     .join("");
 }
 
-// Реализация делегирования на div.gallery и получение url большого изображения.
+/// Реализация делегирования на div.gallery и получение url большого изображения.
+const onClickGalleryContainer = galleryContainer.addEventListener(
+  "click",
+  onClickGallery
+);
+
+function onClickGallery(e) {
+  //  Запретить переход на новую страницу по клику на ссылку
+  e.preventDefault();
+
+  const isGalleryImgEl = e.target.classList.contains("gallery__image");
+  if (!isGalleryImgEl) {
+    return;
+  }
+  //   Получить url большого изображения
+  console.log(e.target.dataset.source);
+}
