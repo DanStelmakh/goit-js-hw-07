@@ -16,8 +16,8 @@ import { galleryItems } from "./gallery-items.js";
 </div>
 */
 const galleryContainer = document.querySelector(".gallery");
-// Переменная для хранения вызова функции
 const createImageCards = addGalleryItem(galleryItems);
+
 // Добавить созданные элементы в разметку
 galleryContainer.insertAdjacentHTML("beforeend", createImageCards);
 
@@ -41,11 +41,24 @@ function addGalleryItem(items) {
 }
 
 /// Реализация делегирования на div.gallery и получение url большого изображения.
-const onClickGalleryContainer = galleryContainer.addEventListener(
-  "click",
-  onClickGallery
+galleryContainer.addEventListener("click", onClickGallery);
+// / Открытие и закрытие модального окна в переменной
+let instance = basicLightbox.create(
+  `
+   <img  src="">
+   `,
+  {
+    onShow: () => {
+      //   console.log("Open");
+      window.addEventListener("keydown", onEscModalClose);
+    },
+    onClose: () => {
+      //   console.log("Close");
+      window.removeEventListener("keydown", onEscModalClose);
+    },
+  }
 );
-
+// /Функция клика по элементам галереи
 function onClickGallery(e) {
   //  Запретить переход на новую страницу по клику на ссылку
   e.preventDefault();
@@ -55,5 +68,19 @@ function onClickGallery(e) {
     return;
   }
   //   Получить url большого изображения
-  console.log(e.target.dataset.source);
+  const bigImageUrl = e.target.dataset.source;
+  //  Добавить src на картинку
+  const elem = instance.element();
+  //   console.log(elem);
+  const img = elem.querySelector("img");
+  //   console.log(img.src);
+  img.src = bigImageUrl;
+
+  instance.show();
+}
+// /Закрытие модалки кнопкой
+function onEscModalClose(evt) {
+  if (evt.code === "Escape") {
+    instance.close();
+  }
 }
